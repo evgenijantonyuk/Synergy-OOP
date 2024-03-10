@@ -251,39 +251,61 @@ dog.walk();
 // dog.fly();
 
 // Dependency inversion principle - принципп инверсии зависимостей
-class Fetch {
-    request(url) {
-        return Promise.resolve('Test data');
+// прмтер из урока
+// class Fetch {
+//     request(url) {
+//         return Promise.resolve('Test data');
+//     }
+// }
+// class LocalStorage {
+//     get() {
+//         const localStorageData = 'neq test data';
+//         return localStorageData
+//     }
+// }
+// class FetchClient {
+//     constructor() {
+//         this.fetch = new Fetch()
+//     }
+// }
+// class localStorageClient {
+//     constructor() {
+//         this.localStorage = new LocalStorage;
+//     }
+//         clientGet(key) {
+//         return this.localStorage.get(key);
+//         }
+// }
+// class Database {
+//     constructor(client) {
+//         this.client = client;
+//     }
+//     getData(url) {
+//         return this.client.clientGet(url);
+//     }
+// }
+// const db = new Database(new FetchClient);
+// console.log(db.getData('any url'));
+// const db1 = new Database(new localStorageClient)
+// console.log(db1.getData('key'));
+
+// ========== пример еще один, не из урока
+// класс User не зависит от конкретной реализации класса MySQLDatabase, а зависит от абстракции Database. Это позволяет нам легко заменить реализацию базы данных на другую, не меняя код класса User.
+class User {
+    constructor(database) {
+        this.database = database;
+    }
+    
+    save() {
+        this.database.save();
     }
 }
-class LocalStorage {
-    get() {
-        const localStorageData = 'neq test data';
-        return localStorageData
+
+class MySQLDatabase {
+    save() {
+        console.log('Saving to MySQL database');
     }
 }
-class FetchClient {
-    constructor() {
-        this.fetch = new Fetch()
-    }
-}
-class localStorageClient {
-    constructor() {
-        this.localStorage = new LocalStorage;
-    }
-        clientGet(key) {
-        return this.localStorage.get(key);
-        }
-}
-class Database {
-    constructor(client) {
-        this.client = client;
-    }
-    getData(url) {
-        return this.client.clientGet(url);
-    }
-}
-const db = new Database(new FetchClient);
-console.log(db.getData('any url'));
-const db1 = new Database(new localStorageClient)
-console.log(db1.getData('key'));
+
+const user = new User(new MySQLDatabase());
+user.save();
